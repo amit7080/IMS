@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IMS.WebApp</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/IMS.WebApp.styles.css" asp-append-version="true" />
+    <link href="~/css/dashboard.css" rel="stylesheet" />
+    <link href="~/css/dashboard.rtl.css" rel="stylesheet" />
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle; 
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @@media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <header class="navbar  sticky-top flex-md-nowrap p-0 ">
+        <p class="navbar-brand col-md-3 col-lg-2 me-0 px-3"><img id="userImage" style="border-radius: 50%;" src="" height="25px" width="25px" /><b class="ms-1" id="loggedUserName"></b></p>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="User" asp-action="Employees">
+                                <i class="ri-user-3-line me-1"></i>
+                                Employees
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Department" asp-action="Department">
+                                <i class="ri-briefcase-line me-1"></i>
+                                Department
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="" asp-controller="Auth" asp-action="Logout">
+                                <i class="ri-logout-box-line me-1"></i> Sign out
+                            </a>
+                        </li>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js" integrity="sha256-J8ay84czFazJ9wcTuSDLpPmwpMXOm573OUtZHPQqpEU=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" integrity="sha512-MqL4+Io386IOPMKKyplKII0pVW5e+kb+PI/I3N87G3fHIfrgNNsRpzIXEi+0MQC0sR9xZNqZqCYVcC61fL5+Vg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @await Component.InvokeAsync("Notyf")
+    <script>
+        $(document).ready(function () {
+            //serializeFormToObject plugin for jQuery
+            $.fn.serializeFormToObject = function (camelCased = false) {
+                //serialize to array
+                var data = $(this).serializeArray();
+
+                //add also disabled items
+                $(':disabled[name]', this).each(function () {
+                    data.push({ name: this.name, value: $(this).val() });
+                });
+
+                //map to object
+                var obj = {};
+                data.map(function (x) { obj[x.name] = x.value; });
+
+                if (camelCased && camelCased === true) {
+                    return convertToCamelCasedObject(obj);
+                }
+
+                return obj;
+            };
+
+            function convertToCamelCasedObject(obj) {
+                var newObj, origKey, newKey, value;
+                if (obj instanceof Array) {
+                    return obj.map(value => {
+                        if (typeof value === 'object') {
+                            value = convertToCamelCasedObject(value);
+                        }
+                        return value;
+                    });
+                } else {
+                    newObj = {};
+                    for (origKey in obj) {
+                        if (obj.hasOwnProperty(origKey)) {
+                            newKey = (
+                                origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey
+                            ).toString();
+                            value = obj[origKey];
+                            if (
+                                value instanceof Array ||
+                                (value !== null && value.constructor === Object)
+                            ) {
+                                value = convertToCamelCasedObject(value);
+                            }
+                            newObj[newKey] = value;
+                        }
+                    }
+                }
+                return newObj;
+            }
+
+            $.ajax({
+                url: '/GetCurrentUserProfileImage',
+                method: 'GET', // or 'POST' depending on your API
+                success: function (response) {
+                    // Assuming the response contains the path or URL to the image
+                    var imagePath = response.profileImage; // Adjust based on the actual response structure
+                    $("#loggedUserName").text(response.name);
+                    // Update the src attribute of the image element
+                    $('#userImage').attr('src', '/UserImages/' + imagePath);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching image data:', status, error);
+                }
+            });
+
+
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

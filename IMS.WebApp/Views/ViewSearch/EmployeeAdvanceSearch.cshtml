@@ -1,0 +1,38 @@
+﻿<div class="abp-advanced-search">
+    <form id="EmployeeAdvanceSearchForm" class="form-horizontal">
+        <div class="row mb-3">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <label for="startDate" class="form-label">Start Date:</label>
+                <input type="date" id="startDateEmployee" class="form-control" onkeydown="return false">
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <label for="endDate" class="form-label">End Date:</label>
+                <input type="date" id="endDateEmployee" onkeydown="return false" class="form-control">
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 d-flex align-items-end mb-3">
+                <button type="button" id="filterButtonEmployee" class="btn btn-primary" style="margin-left:2px;">Apply Filter</button>
+                <button type="button" id="clearfilterButtonEmployee" class="btn btn-secondary" style="margin-left:2px;">Clear Filter</button>
+            </div>
+            <div id="errorMessageEmployee" class="col-12"></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                <div class="input-group">
+                    <a href="javascript:;" id="openCreateEmployeeModalBtn" data-target="#CreateEmployeeModal" class="btn btn-primary btn-block me-2">
+                        Add Employee
+                    </a>
+                    <input type="text" name="Search" class="form-control txt-search" id="SearchInput" placeholder="Search" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn bg-blue btn-search">
+                            <span class="fas fa-search" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+               
+                
+            </div>
+        </div>
+    </form>
+</div>

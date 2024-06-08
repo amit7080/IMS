@@ -1,0 +1,65 @@
+﻿@model IEnumerable<IMS.Data.Model.Department>
+@{
+    ViewData["Title"] = "Department";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .error {
+        color: red;
+        display: none;
+    }
+</style>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-md-8">
+                <h1>Department</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="department-head">
+                   
+                    <div class="col-md-12 grey-btn mt-2">
+                        @await Html.PartialAsync("~/Views/ViewSearch/DepartmentAdvanceSearch.cshtml")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive me-2">
+                            <table id="departmentsTable" class="table table-hover mt-2 table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Department Name</th>
+                                        <th>Creation Date</th>
+                                        <th style="width: 150px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table body content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="modalContainer" style="display: none;"></div>
+@await Html.PartialAsync("~/Views/Department/_CreateDepartment.cshtml")
+@await Html.PartialAsync("~/Views/Department/_EditDepartment.cshtml")
+
+@section scripts {
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="~/view-resources/custom-js/department.js"></script>
+}

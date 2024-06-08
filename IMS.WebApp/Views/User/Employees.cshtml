@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-md-8">
+                <h1>Employees</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="hotel-head">
+                    <div class="col-md-12 grey-btn mt-2">
+                        @await Html.PartialAsync("~/Views/ViewSearch/EmployeeAdvanceSearch.cshtml")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="employeesTable" class="table table-striped table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Name</th>
+                                        <th>Joining Date</th>
+                                        <th>Mobile Number</th>
+                                        <th>Department Name</th>
+                                        <th>Image</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th style="width: 150px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table body content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="modalContainer" style="display: none;"></div>
+@await Html.PartialAsync("~/Views/User/_CreateUser.cshtml")
+
+@section scripts {
+    <script src="~/view-resources/custom-js/employee.js"></script>
+}

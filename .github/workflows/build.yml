@@ -52,7 +52,7 @@ jobs:
           dotnet build
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
-- name: Deploy after successful build
+      - name: Deploy after successful build
         if: success()
         run: |
           $publishData = @"
@@ -98,9 +98,8 @@ jobs:
           # Example commands for deployment
           # You may need to install FTP client if not already available
           echo "Uploading files to FTP server..."
-          $ftpCommands = @"
+          ftp -i -n $ftpUrl <<EOF
           user $ftpUsername $ftpPassword
-          put -r .
+          put -r . # Upload all files recursively
           quit
-          "@
-          echo $ftpCommands | ftp -i -n $ftpUrl
+          EOF

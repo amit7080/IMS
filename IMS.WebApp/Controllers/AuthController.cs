@@ -11,7 +11,7 @@ namespace IMS.WebApp.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly ITokenService _tokenService;
+        private readonly ITokenService _tokenService; 
 
         public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService)
         {

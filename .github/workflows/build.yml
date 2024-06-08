@@ -100,6 +100,7 @@ jobs:
           echo "Uploading files to FTP server..."
           $ftpCommands = @"
           user $ftpUsername $ftpPassword
-          put -r . # Upload all files recursively
-          quit "@
+          put -r .
+          quit 
+          "@
           echo $ftpCommands | ftp -i -n $ftpUrl

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.WebApp.Controllers
 {
+    [Route("AuthController")]
     public class AuthController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -21,10 +22,10 @@ namespace IMS.WebApp.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        //public IActionResult Login()
-        //{
-        //    return View();
-        //}
+        public IActionResult Login()
+        {
+            return View();
+        }
 
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login(LoginModel model)

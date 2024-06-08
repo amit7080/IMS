@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.WebApp.Controllers
 {
-    [Route("AuthController")]
     public class AuthController : Controller
     {
         private readonly UserManager<User> _userManager;

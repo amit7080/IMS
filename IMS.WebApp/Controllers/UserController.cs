@@ -202,7 +202,6 @@ namespace IMS.WebApp.Controllers
                                 IsSuccess = false,
                                 Message = "Email already exist"
                             });
-                            // return new BadRequestObjectResult(new { succeeded = false, msg = "Email already exist" });
                         }
                     }
                 }
@@ -345,7 +344,7 @@ namespace IMS.WebApp.Controllers
 
             // Fetch the user's data from the repository
             var user = await _userRepository.GetAllUser();
-            var loggedUser = user.Where(x => x.Id == userId).FirstOrDefault();
+            var loggedUser = user.Find(x => x.Id == userId);
 
             // Return the user's profile image
             return Json(new
@@ -413,8 +412,8 @@ namespace IMS.WebApp.Controllers
 
                     }
 
-                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(users);
-                    var ResetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(users);
+                    _ = await _userManager.GenerateEmailConfirmationTokenAsync(users);
+                     _ = await _userManager.GeneratePasswordResetTokenAsync(users);
 
                 }
                 return true;

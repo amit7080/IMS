@@ -18,28 +18,27 @@ namespace IMS.Services.Repositories
             _unitofWork = unitofWork;
             _departmentReposoitory = _unitofWork.GetRepository<Department>();
         }
-        public  Task<List<Department>> GetAllDepartments()
+        public Task<List<Department>> GetAllDepartments()
         {
-           return _departmentReposoitory.GetAll().ToListAsync();
+            return _departmentReposoitory.GetAll().ToListAsync();
         }
         public async Task<Department> CreateDepartments(Department department)
         {
-            _= _departmentReposoitory.Add(department);
+            _ = _departmentReposoitory.Add(department);
             _unitofWork.commit();
             return department;
         }
         public async Task<Department> UpdateDepartments(Department department)
         {
             var departments = await _departmentReposoitory.GetByIdAsync(department.DepartmentId);
-            departments.Name=department.Name;
-            _= _departmentReposoitory.Update(departments);
+            departments.Name = department.Name;
+            _ = _departmentReposoitory.Update(departments);
             _unitofWork.commit();
             return department;
         }
         public async Task<bool> DeleteDepartment(int id)
         {
-            var department = await _departmentReposoitory.GetByIdAsync(id);
-              _departmentReposoitory.Delete(department);
+            _departmentReposoitory.Delete(await _departmentReposoitory.GetByIdAsync(id));
             _unitofWork.commit();
             return true;
         }

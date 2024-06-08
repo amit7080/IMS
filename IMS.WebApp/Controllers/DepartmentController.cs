@@ -37,7 +37,7 @@ namespace IMS.WebApp.Controllers
         [HttpGet,Route("FetchDepartments")]
         public async Task<IActionResult> FetchDepartments(PaginationDtos input)
         {
-            var departments = await _departmentRepository.GetAllDepartments();
+            List<Department> departments = await _departmentRepository.GetAllDepartments();
             var count = departments.Count();
             if (input != null && !string.IsNullOrEmpty(input.Search) && departments != null)
             {
@@ -54,13 +54,12 @@ namespace IMS.WebApp.Controllers
                 ).ToList();
             }
 
-            var departmentList = departments.Skip(input.SkipCount).Take(input.MaxResultCount).ToList();
 
             return Json(new
             {
                 recordsTotal = count,
                 recordsFiltered = count,
-                data = departmentList
+                data = departments.Skip(input.SkipCount).Take(input.MaxResultCount).ToList()
             });
         }
         [HttpGet, Route("GetAllDepartments")]

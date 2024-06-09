@@ -20,15 +20,15 @@ namespace IMS.Data.Context
         {
             base.OnConfiguring(optionsBuilder);
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<AssignUser>()
+            builder.Entity<AssignUser>()
                .HasOne(x => x.AssignedHr).WithMany(t => t.AssignedHr).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<AssignUser>()
+            builder.Entity<AssignUser>()
                 .HasOne(x => x.AssignedManager).WithMany(t => t.AssignedManager).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<AssignUser>()
+            builder.Entity<AssignUser>()
                 .HasOne(x => x.User).WithMany(t => t.Users).OnDelete(DeleteBehavior.Restrict);
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
         }
         public override int SaveChanges()
         {

@@ -12,11 +12,6 @@ namespace IMS.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        public HomeController(ILogger<HomeController> logger, IDepartmentServices departmentRepository,IUnitOfWork unitOfWork)
-        {
-            _logger = logger;
-        }
         
         public async Task<IActionResult> Index()
         {

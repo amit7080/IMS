@@ -58,7 +58,7 @@ builder.Services.AddDbContext<IMSDbContext>(options => options.UseSqlServer(buil
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<IUserRepository,UserRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IDepartmentServices, DepartmentServices>();
 builder.Services.AddTransient<IdentityDataSeeder, IdentityDataSeeder>();
 builder.Services.AddNotyf(config =>
@@ -73,11 +73,13 @@ builder.Services.AddControllersWithViews();
 var app = builder.Build();
 app.UseMiddleware<JwtCookieAuthenticationMiddleware>(); // Add this line to use the middleware
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 app.MapControllerRoute(
@@ -92,7 +94,6 @@ app.UseNotyf();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-//app.MapRazorPages();
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.Run();

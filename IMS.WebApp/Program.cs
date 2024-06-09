@@ -96,4 +96,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<CustomExceptionMiddleware>();
 
-app.Run();
+await app.RunAsync();

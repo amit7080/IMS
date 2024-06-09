@@ -38,7 +38,7 @@ namespace IMS.WebApp.Controllers
         public async Task<IActionResult> FetchDepartments(PaginationDtos input)
         {
             List<Department> departments = await _departmentRepository.GetAllDepartments();
-            var count = departments.Count();
+            var count = departments.Count;
             if (input != null && !string.IsNullOrEmpty(input.Search) && departments != null)
             {
                 departments = departments.Where(t =>

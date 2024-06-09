@@ -40,7 +40,7 @@ namespace IMS.Services.Repositories
                 _unitofWork.commit();
                 return registerViewModel;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new User();
             }
@@ -61,7 +61,7 @@ namespace IMS.Services.Repositories
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -76,7 +76,7 @@ namespace IMS.Services.Repositories
                 _unitofWork.commit();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

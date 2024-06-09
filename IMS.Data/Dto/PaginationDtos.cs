@@ -12,15 +12,15 @@ namespace IMS.Data.Dto
         /// <summary>
         /// Search
         /// </summary>
-        public string Search { get; set; }
+        public string? Search { get; set; }
         /// <summary>
         /// StartDate
         /// </summary>
-        public string StartDate { get; set; }
+        public string? StartDate { get; set; }
         /// <summary>
         /// EndDate
         /// </summary>
-        public string EndDate { get; set; }
+        public string? EndDate { get; set; }
         /// <summary>
         /// IsActive
         /// </summary>

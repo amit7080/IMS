@@ -39,13 +39,13 @@ namespace IMS.WebApp.Controllers
         {
             List<Department> departments = await _departmentRepository.GetAllDepartments();
             var count = departments.Count;
-            if (input != null && !string.IsNullOrEmpty(input.Search) && departments != null)
+            if (input != null && !string.IsNullOrEmpty(input.Search) && departments.Any())
             {
                 departments = departments.Where(t =>
                     !string.IsNullOrEmpty(input.Search) && t.Name.Contains(input.Search, StringComparison.OrdinalIgnoreCase)
                 ).ToList();
             }
-            if (!string.IsNullOrEmpty(input.StartDate) && !string.IsNullOrEmpty(input.EndDate))
+            if (!string.IsNullOrEmpty(input?.StartDate) && !string.IsNullOrEmpty(input.EndDate))
             {
                 var startDate = Convert.ToDateTime(input.StartDate).Date + new TimeSpan(00, 00, 00);
                 var endDate = Convert.ToDateTime(input.EndDate).Date + new TimeSpan(23, 59, 59);

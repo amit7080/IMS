@@ -25,7 +25,7 @@ namespace IMS.Services.Repositories
         public async Task<Department> CreateDepartments(Department department)
         {
             _ = _departmentReposoitory.Add(department);
-            _unitofWork.commit();
+            _=_unitofWork.commit();
             return department;
         }
         public async Task<Department> UpdateDepartments(Department department)

@@ -40,7 +40,7 @@ namespace IMS.Data.Context
                 {
                     continue;
                 }
-                var userId = _httpContextAccessor.HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var time = DateTime.Now;
                 if (entity.State == EntityState.Added)
                 {

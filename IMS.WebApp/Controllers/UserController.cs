@@ -104,123 +104,123 @@ namespace IMS.WebApp.Controllers
 
 
 
-        [HttpPost, Route("createUserAsync")]
-        public async Task<IActionResult> CreateUserAsync(RegisterViewModel model)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (model.Role == UserRoles.Employee && (string.IsNullOrEmpty(model.AssignedHrId) || string.IsNullOrEmpty(model.AssignedManagerId)))
-                    {
-                        // return new BadRequestObjectResult(new { succeeded = false, msg = "Assign ManagerID or Assign HRID not be null" });
-                        //return new OkObjectResult(new ResponseMessageViewModel
-                        //{
-                        //    IsSuccess = false,
-                        //    Message = "Assign ManagerID or Assign HRID not be null"
-                        //});
-                    }
-                    else
-                    {
-                        var mailResult = await _userRepository.IsEmailExist(model.Email);
-                        if (!mailResult)
-                        {
-                            var user = new User
-                            {
-                                UserName = model.Email,
-                                Email = model.Email,
-                                FirstName = model.FirstName,
-                                LastName = model.LastName,
-                                PhoneNumber = model.Phone,
-                                Address = model.Address,
-                                Gender = model.Gender,
-                                JoiningDate = model.JoiningDate,
-                                DOB = model.DOB,
-                                DepartmentId = model.DepartmentId,
-                                EmailConfirmed = false,
-                                PhoneNumberConfirmed = true,
-                            };
-                            var result = await _userManager.CreateAsync(user, model.Password);
-                            if (result.Succeeded)
-                            {
-                                var roles = await _userManager.AddToRoleAsync(user, model.Role);
-                                if (roles.Succeeded)
-                                {
-                                    if (model.AssignedHrId != null || model.AssignedManagerId != null)
-                                    {
-                                        var assignUser = new AssignUser
-                                        {
-                                            UserId = user.Id,
-                                            AssignedHrId = model.AssignedHrId,
-                                            AssignedManagerId = model.AssignedManagerId
-                                        };
-                                        _ = _assignUserRepository.Add(assignUser);
-                                        var assignResult = _unitOfWork.commit();
-                                    }
+        //[HttpPost, Route("createUserAsync")]
+        //public async Task<IActionResult> CreateUserAsync(RegisterViewModel model)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            if (model.Role == UserRoles.Employee && (string.IsNullOrEmpty(model.AssignedHrId) || string.IsNullOrEmpty(model.AssignedManagerId)))
+        //            {
+        //                // return new BadRequestObjectResult(new { succeeded = false, msg = "Assign ManagerID or Assign HRID not be null" });
+        //                //return new OkObjectResult(new ResponseMessageViewModel
+        //                //{
+        //                //    IsSuccess = false,
+        //                //    Message = "Assign ManagerID or Assign HRID not be null"
+        //                //});
+        //            }
+        //            else
+        //            {
+        //                var mailResult = await _userRepository.IsEmailExist(model.Email);
+        //                if (!mailResult)
+        //                {
+        //                    var user = new User
+        //                    {
+        //                        UserName = model.Email,
+        //                        Email = model.Email,
+        //                        FirstName = model.FirstName,
+        //                        LastName = model.LastName,
+        //                        PhoneNumber = model.Phone,
+        //                        Address = model.Address,
+        //                        Gender = model.Gender,
+        //                        JoiningDate = model.JoiningDate,
+        //                        DOB = model.DOB,
+        //                        DepartmentId = model.DepartmentId,
+        //                        EmailConfirmed = false,
+        //                        PhoneNumberConfirmed = true,
+        //                    };
+        //                    var result = await _userManager.CreateAsync(user, model.Password);
+        //                    if (result.Succeeded)
+        //                    {
+        //                        var roles = await _userManager.AddToRoleAsync(user, model.Role);
+        //                        if (roles.Succeeded)
+        //                        {
+        //                            if (model.AssignedHrId != null || model.AssignedManagerId != null)
+        //                            {
+        //                                var assignUser = new AssignUser
+        //                                {
+        //                                    UserId = user.Id,
+        //                                    AssignedHrId = model.AssignedHrId,
+        //                                    AssignedManagerId = model.AssignedManagerId
+        //                                };
+        //                                _ = _assignUserRepository.Add(assignUser);
+        //                               _ = _unitOfWork.commit();
+        //                            }
 
-                                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                                    var ResetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //                            _ = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        //                            var ResetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
 
-                                    if (ResetPasswordToken != null)
-                                    {
-                                        user.UserToken = Uri.EscapeDataString(ResetPasswordToken);
-                                        await _userManager.UpdateAsync(user);
-                                    }
+        //                            if (ResetPasswordToken != null)
+        //                            {
+        //                                user.UserToken = Uri.EscapeDataString(ResetPasswordToken);
+        //                                await _userManager.UpdateAsync(user);
+        //                            }
 
-                                    // return new OkObjectResult(new { succeded = result, model });
-                                    return new OkObjectResult(new
-                                    {
-                                        IsSuccess = true,
-                                        Data = model,
-                                        Message = "User Added"
-                                    });
-                                }
-                                else
-                                {
-                                    return new OkObjectResult(new
-                                    {
-                                        IsSuccess = false,
-                                        Message = result.Errors.Select(x => x.Description).FirstOrDefault()
-                                    });
-                                }
+        //                            // return new OkObjectResult(new { succeded = result, model });
+        //                            return new OkObjectResult(new
+        //                            {
+        //                                IsSuccess = true,
+        //                                Data = model,
+        //                                Message = "User Added"
+        //                            });
+        //                        }
+        //                        else
+        //                        {
+        //                            return new OkObjectResult(new
+        //                            {
+        //                                IsSuccess = false,
+        //                                Message = result.Errors.Select(x => x.Description).FirstOrDefault()
+        //                            });
+        //                        }
 
-                            }
-                            else
-                            {
-                                return new OkObjectResult(new
-                                {
-                                    IsSuccess = false,
-                                    Message = result.Errors.Select(x => x.Description).FirstOrDefault()
-                                });
-                            }
-                        }
-                        else
-                        {
-                            return new OkObjectResult(new
-                            {
-                                IsSuccess = false,
-                                Message = "Email already exist"
-                            });
-                        }
-                    }
-                }
-                return new OkObjectResult(new
-                {
-                    IsSuccess = false,
-                    Message = "Model is not validate"
-                });
-            }
-            catch (Exception ex)
-            {
+        //                    }
+        //                    else
+        //                    {
+        //                        return new OkObjectResult(new
+        //                        {
+        //                            IsSuccess = false,
+        //                            Message = result.Errors.Select(x => x.Description).FirstOrDefault()
+        //                        });
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    return new OkObjectResult(new
+        //                    {
+        //                        IsSuccess = false,
+        //                        Message = "Email already exist"
+        //                    });
+        //                }
+        //            }
+        //        }
+        //        return new OkObjectResult(new
+        //        {
+        //            IsSuccess = false,
+        //            Message = "Model is not validate"
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return new OkObjectResult(new
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                });
-            }
-        }
+        //        return new OkObjectResult(new
+        //        {
+        //            IsSuccess = false,
+        //            Message = ex.Message
+        //        });
+        //    }
+        //}
 
         /// <summary>
         /// GetAllRoles
@@ -359,20 +359,17 @@ namespace IMS.WebApp.Controllers
         {
             try
             {
-                string filePath = string.Empty;
                 string relativeDir = Path.Combine("UserImages");
-                string wwwRootPath = _env.WebRootPath;
-                string fullRelativeDir = Path.Combine(wwwRootPath, relativeDir);
+                string fullRelativeDir = Path.Combine(_env.WebRootPath, relativeDir);
 
                 if (!Directory.Exists(fullRelativeDir))
                 {
                     Directory.CreateDirectory(fullRelativeDir);
                 }
-
+                // Convert and save the profile image
                 byte[] imageBytes = Convert.FromBase64String(user.ProfileImage);
-                string fullRelativeFilePath = Path.Combine(relativeDir, user.ImageName);
-                string fullPath = Path.Combine(wwwRootPath, fullRelativeFilePath);
-                await System.IO.File.WriteAllBytesAsync(fullPath, imageBytes);
+                string fullRelativeFilePath = Path.Combine(fullRelativeDir, user.ImageName);
+                await System.IO.File.WriteAllBytesAsync(fullRelativeFilePath, imageBytes);
 
                 var users = new User
                 {
@@ -396,43 +393,44 @@ namespace IMS.WebApp.Controllers
                 var result = await _userManager.CreateAsync(users, user.Password);
                 if (result.Succeeded)
                 {
-                    var roleName = await _roleManager.Roles.ToListAsync();
-                    var currentRoleName = roleName.Find(x => x.Id == user.Role);
-                    var roles = await _userManager.AddToRoleAsync(users, currentRoleName.Name);
-                    if (roles.Succeeded)
+                    var roleName = (await _roleManager.Roles.ToListAsync()).Find(x => x.Id == user.Role)?.Name;
+
+                    if (!string.IsNullOrEmpty(roleName))
                     {
-                        if (user.AssignedHrId != null || user.AssignedManagerId != null)
+                        var addToRoleResult = await _userManager.AddToRoleAsync(users, roleName);
+                        if (addToRoleResult.Succeeded)
                         {
-                            var assignUser = new AssignUser
+                            if (user.AssignedHrId != null || user.AssignedManagerId != null)
                             {
-                                UserId = users.Id,
-                                AssignedHrId = user.AssignedHrId,
-                                AssignedManagerId = user.AssignedManagerId
-                            };
-                            _ = _assignUserRepository.Add(assignUser);
-                             _ = _unitOfWork.commit();
+                                var assignUser = new AssignUser
+                                {
+                                    UserId = users.Id,
+                                    AssignedHrId = user.AssignedHrId,
+                                    AssignedManagerId = user.AssignedManagerId
+                                };
+                                _ = _assignUserRepository.Add(assignUser);
+                                _ = _unitOfWork.commit();
+
+                            }
+                            _ = await _userManager.GenerateEmailConfirmationTokenAsync(users);
+                            _ = await _userManager.GeneratePasswordResetTokenAsync(users);
 
                         }
-
-                        _ = await _userManager.GenerateEmailConfirmationTokenAsync(users);
-                        _ = await _userManager.GeneratePasswordResetTokenAsync(users);
-
+                        return true;
                     }
-                    return true;
                 }
                 return false;
             }
-            catch (Exception ex) { 
+            catch (Exception)
+            {
                 return false;
             }
-            
+
         }
-        [HttpPost,Route("deactivateUser")]
+        [HttpPost, Route("deactivateUser")]
         public async Task<bool> DeactivateUser(string userId)
         {
-           return await _userRepository.InActiveUser(userId);
+            return await _userRepository.InActiveUser(userId);
         }
-
-
     }
 }

@@ -20,10 +20,10 @@ namespace IMS.Data.ViewModel
         public string Role { get; set; }
         public DateTime DOB { get; set; }
         public DateTime JoiningDate { get; set; }
-        public int? DepartmentId { get; set; }
-        public string? AssignedManagerId { get; set; }
-        public string? AssignedHrId { get; set; }
-        public string? ProfileImage { get; set; }
-        public string ImageName { get; set; }
+        public int DepartmentId { get; set; }
+        public string AssignedManagerId { get; set; }
+        public string AssignedHrId { get; set; }
+        public string ProfileImage { get; set; }
+        public required string ImageName { get; set; }
     }
 }

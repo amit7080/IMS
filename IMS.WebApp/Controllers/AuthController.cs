@@ -56,9 +56,17 @@ namespace IMS.WebApp.Controllers
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-            HttpContext.Response.Cookies.Delete("JWT");
-            return View("Login");
+            try
+            {
+                await _signInManager.SignOutAsync();
+                HttpContext.Response.Cookies.Delete("JWT");
+                return View("Login");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
         }
     }
 }

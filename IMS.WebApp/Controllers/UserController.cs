@@ -357,68 +357,75 @@ namespace IMS.WebApp.Controllers
         [HttpPost, Route("CreateEmployee")]
         public async Task<bool> CreateEmployee([FromBody] RegisterViewModel user)
         {
-            string filePath = string.Empty;
-            string relativeDir = Path.Combine("UserImages");
-            string wwwRootPath = _env.WebRootPath;
-            string fullRelativeDir = Path.Combine(wwwRootPath, relativeDir);
-
-            if (!Directory.Exists(fullRelativeDir))
+            try
             {
-                Directory.CreateDirectory(fullRelativeDir);
-            }
+                string filePath = string.Empty;
+                string relativeDir = Path.Combine("UserImages");
+                string wwwRootPath = _env.WebRootPath;
+                string fullRelativeDir = Path.Combine(wwwRootPath, relativeDir);
 
-            byte[] imageBytes = Convert.FromBase64String(user.ProfileImage);
-            string fullRelativeFilePath = Path.Combine(relativeDir, user.ImageName);
-            string fullPath = Path.Combine(wwwRootPath, fullRelativeFilePath);
-            await System.IO.File.WriteAllBytesAsync(fullPath, imageBytes);
-
-            var users = new User
-            {
-                Id=Guid.NewGuid().ToString(),
-                UserName = user.Email,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.Phone,
-                Address = user.Address,
-                Gender = user.Gender,
-                JoiningDate = user.JoiningDate,
-                DOB = user.DOB,
-                DepartmentId = user.DepartmentId,
-                EmailConfirmed = false,
-                ProfileImage= user.ImageName,
-                PhoneNumberConfirmed = true,
-                CreationDate=DateTime.UtcNow,
-            };
-
-            var result = await _userManager.CreateAsync(users, user.Password);
-            if (result.Succeeded)
-            {
-                var roleName=await _roleManager.Roles.ToListAsync();
-                var currentRoleName= roleName.Find(x=>x.Id==user.Role);
-                var roles = await _userManager.AddToRoleAsync(users, currentRoleName.Name);
-                if (roles.Succeeded)
+                if (!Directory.Exists(fullRelativeDir))
                 {
-                    if (user.AssignedHrId != null || user.AssignedManagerId != null)
+                    Directory.CreateDirectory(fullRelativeDir);
+                }
+
+                byte[] imageBytes = Convert.FromBase64String(user.ProfileImage);
+                string fullRelativeFilePath = Path.Combine(relativeDir, user.ImageName);
+                string fullPath = Path.Combine(wwwRootPath, fullRelativeFilePath);
+                await System.IO.File.WriteAllBytesAsync(fullPath, imageBytes);
+
+                var users = new User
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = user.Email,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.Phone,
+                    Address = user.Address,
+                    Gender = user.Gender,
+                    JoiningDate = user.JoiningDate,
+                    DOB = user.DOB,
+                    DepartmentId = user.DepartmentId,
+                    EmailConfirmed = false,
+                    ProfileImage = user.ImageName,
+                    PhoneNumberConfirmed = true,
+                    CreationDate = DateTime.UtcNow,
+                };
+
+                var result = await _userManager.CreateAsync(users, user.Password);
+                if (result.Succeeded)
+                {
+                    var roleName = await _roleManager.Roles.ToListAsync();
+                    var currentRoleName = roleName.Find(x => x.Id == user.Role);
+                    var roles = await _userManager.AddToRoleAsync(users, currentRoleName.Name);
+                    if (roles.Succeeded)
                     {
-                        var assignUser = new AssignUser
+                        if (user.AssignedHrId != null || user.AssignedManagerId != null)
                         {
-                            UserId = users.Id,
-                            AssignedHrId = user.AssignedHrId,
-                            AssignedManagerId = user.AssignedManagerId
-                        };
-                        _ = _assignUserRepository.Add(assignUser);
-                        var assignResult = _unitOfWork.commit();
+                            var assignUser = new AssignUser
+                            {
+                                UserId = users.Id,
+                                AssignedHrId = user.AssignedHrId,
+                                AssignedManagerId = user.AssignedManagerId
+                            };
+                            _ = _assignUserRepository.Add(assignUser);
+                             _ = _unitOfWork.commit();
+
+                        }
+
+                        _ = await _userManager.GenerateEmailConfirmationTokenAsync(users);
+                        _ = await _userManager.GeneratePasswordResetTokenAsync(users);
 
                     }
-
-                    _ = await _userManager.GenerateEmailConfirmationTokenAsync(users);
-                     _ = await _userManager.GeneratePasswordResetTokenAsync(users);
-
+                    return true;
                 }
-                return true;
+                return false;
             }
-            return false; 
+            catch (Exception ex) { 
+                return false;
+            }
+            
         }
         [HttpPost,Route("deactivateUser")]
         public async Task<bool> DeactivateUser(string userId)

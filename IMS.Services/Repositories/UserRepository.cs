@@ -34,9 +34,17 @@ namespace IMS.Services.Repositories
         }
         public async Task<User> CreateUserAsync(User registerViewModel)
         {
-            _ = _userRepository.Add(registerViewModel);
-            _unitofWork.commit();
-            return registerViewModel;
+            try
+            {
+                _ = _userRepository.Add(registerViewModel);
+                _unitofWork.commit();
+                return registerViewModel;
+            }
+            catch (Exception ex)
+            {
+                return new User();
+            }
+
         }
 
         public async Task<bool> IsEmailExist(string email)
@@ -60,12 +68,19 @@ namespace IMS.Services.Repositories
         }
         public async Task<bool> InActiveUser(string userId)
         {
+            try
+            {
+                var user = await _userRepository.GetByIdAsync(userId);
+                user.IsActive = !user.IsActive;
+                _userRepository.Update(user);
+                _unitofWork.commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
-            var user = await _userRepository.GetByIdAsync(userId);
-            user.IsActive = !user.IsActive;
-            _userRepository.Update(user);
-            _unitofWork.commit();
-            return true;
         }
     }
 }

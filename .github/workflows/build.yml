@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.x'  # Replace with your .NET Core version
+          dotnet-version: '8.x'  # Replace with your .NET Core version
 
       - name: Cache SonarQube packages
         uses: actions/cache@v2

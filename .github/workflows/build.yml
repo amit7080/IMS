@@ -33,6 +33,6 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
           export PATH="$PATH:$HOME/.dotnet/tools"
-          dotnet sonarscanner begin /k:"your_project_key" /d:sonar.host.url="http://your_sonarqube_server_url" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner begin /k:"IMS" /d:sonar.host.url="http://localhost:9000/" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

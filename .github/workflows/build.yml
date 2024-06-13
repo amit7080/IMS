@@ -1,46 +1,63 @@
-name: Build
+name: SonarQube Scan
 
 on:
   push:
     branches:
-      - master
-
+      - master  # or your default branch
+  pull_request:
+    branches:
+      - master # or your default branch
 
 jobs:
-  build:
-    name: Build and analyze
+  sonarqube:
     runs-on: windows-latest
-    
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
+          dotnet-version: '8.x'  # Replace with your .NET Core version
+
+      - name: Install SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
       - name: Cache SonarQube packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~\.sonar\cache
+          path: C:\Users\runneradmin\.sonar\cache
           key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarQube scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarQube scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
+
+      - name: Run SonarQube Begin
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Build and analyze
-        shell: powershell
+          $env:PATH += ";C:\Users\runneradmin\.dotnet\tools"
+          dotnet sonarscanner begin /k:"your_project_key" /d:sonar.host.url="http://your_sonarqube_server_url" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          if ($?) { Write-Host 'SonarQube begin succeeded' } else { Write-Error 'SonarQube begin failed' }
+
+      - name: Build Project
+        run: dotnet build
+
+      - name: List .sonarqube Directory
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"IMS" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-          dotnet build
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          if (Test-Path -Path ".sonarqube") {
+            Get-ChildItem -Path .sonarqube -Recurse | Write-Host
+          } else {
+            Write-Host ".sonarqube directory does not exist"
+          }
+
+      - name: List .sonarqube/conf Directory
+        run: |
+          if (Test-Path -Path ".sonarqube\conf") {
+            Get-ChildItem -Path .sonarqube\conf | Write-Host
+          } else {
+            Write-Host ".sonarqube\conf directory does not exist"
+          }
+
+      - name: Run SonarQube End
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

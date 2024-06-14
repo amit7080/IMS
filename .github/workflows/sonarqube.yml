@@ -33,7 +33,7 @@ jobs:
 
       - name: Run SonarQube Scanner
         run: |
-          ./sonar-scanner/bin/sonar-scanner.bat -Dsonar.projectKey="IMS" -Dsonar.sources=. -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          ./sonar-scanner/bin/sonar-scanner.bat -D"sonar.projectKey=IMS" -Dsonar.sources=. -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

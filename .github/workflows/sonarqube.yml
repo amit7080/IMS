@@ -1,40 +1,25 @@
-name: SonarQube analysis
-
 on:
+  # Trigger analysis when pushing in master or pull requests, and when creating
+  # a pull request. 
   push:
-    branches: ["*"]
+    branches:
+      - master
   pull_request:
-    branches: ["*"]
-  workflow_dispatch:
+      types: [opened, synchronize, reopened]
 
-permissions:
-  pull-requests: read
-
+name: SonarQube Scan
 jobs:
-  Analysis:
-    runs-on: windows-latest
-
+  sonarqube:
+    name: SonarQube Trigger
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-
-      - name: Download and set up SonarScanner
-        run: |
-          Invoke-WebRequest -Uri "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-windows.zip" -OutFile "sonar-scanner.zip"
-          Expand-Archive -Path "sonar-scanner.zip" -DestinationPath "."
-          Rename-Item -Path "sonar-scanner-4.7.0.2747-windows" -NewName "sonar-scanner"
-          echo "${{ github.workspace }}\sonar-scanner\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-      - name: Run SonarQube Scanner
-        run: |
-          sonar-scanner\bin\sonar-scanner.bat -Dsonar.projectKey=IMS -Dsonar.sources=. -Dsonar.host.url=$env:SONAR_HOST_URL -Dsonar.login=$env:SONAR_TOKEN
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    - name: Checking out
+      uses: actions/checkout@master
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarQube Scan
+      uses: kitabisa/sonarqube-action@v1.2.0
+      with:
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}

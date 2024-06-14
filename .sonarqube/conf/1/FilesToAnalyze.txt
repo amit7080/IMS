@@ -1,0 +1,6 @@
+﻿F:\IMS\IMS\IMS.Services\IRepositories\IDepartmentServices.cs
+F:\IMS\IMS\IMS.Services\IRepositories\ITokenService.cs
+F:\IMS\IMS\IMS.Services\IRepositories\IUserRepository.cs
+F:\IMS\IMS\IMS.Services\Repositories\DepartmentServices.cs
+F:\IMS\IMS\IMS.Services\Repositories\TokenService.cs
+F:\IMS\IMS\IMS.Services\Repositories\UserRepository.cs

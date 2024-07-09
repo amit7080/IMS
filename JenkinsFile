@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    environment {
+        DOTNET_VERSION = '8.0'
+        // Add other environment variables here
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install .NET SDK') {
+            steps {
+                script {
+                    def dotnetInstalled = sh(script: 'dotnet --version', returnStatus: true) == 0
+                    if (!dotnetInstalled) {
+                        sh 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel ${DOTNET_VERSION}'
+                        env.PATH = "${env.PATH}:${HOME}/.dotnet"
+                    }
+                }
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                sh 'dotnet restore'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'dotnet build --configuration Release --no-restore'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'dotnet test --no-restore --verbosity normal'
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                sh 'dotnet publish --configuration Release --output ./publish --no-restore'
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'publish/**', allowEmptyArchive: true
+            }
+        }
+
+        // Add deployment stage here if needed
+    }
+
+    post {
+        always {
+            junit '*/TestResults/*.xml'
+            cleanWs()
+        }
+    }
+}
